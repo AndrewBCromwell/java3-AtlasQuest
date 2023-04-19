@@ -1,0 +1,35 @@
+header{
+    padding: 5px;
+    background-image: url(https://www.atlasquest.com/css/normal/titlebar.jpg);
+}
+
+nav{
+    background-color: #a7ccfa;
+}
+
+nav ul{
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+nav a{
+    display: inline-block;
+    padding: 5px 30px;
+    text-decoration: none;
+    color: black;
+}
+
+nav a:hover{
+    color: gold;
+    background-color: darkblue;
+}
+
+main{
+    margin: 30px;
+}
+
+h1 {
+    font-family: cursive;
+}
