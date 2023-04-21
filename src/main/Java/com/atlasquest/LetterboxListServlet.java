@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(name = "LetterboxListServlet", value = "/LetterboxList", urlPatterns = {"/letterbox", "/Letterbox", "/letterboxes", "/Letterboxes"})
+@WebServlet(name = "LetterboxListServlet", urlPatterns = {"/letterbox", "/Letterbox", "/letterboxes", "/Letterboxes"})
 public class LetterboxListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -18,9 +18,12 @@ public class LetterboxListServlet extends HttpServlet {
         ArrayList<Letterbox> letterboxes;
         try{
             letterboxes = lbAccess.SelectAllLetterboxes();
+            request.setAttribute("Letterboxes", letterboxes);
         }catch (SQLException e){
             request.setAttribute("Error", e.getMessage());
         }
+
+        request.getRequestDispatcher("WEB-INF/LetterboxList.jsp").forward(request, response);
     }
 
     @Override

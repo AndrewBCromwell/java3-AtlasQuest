@@ -21,6 +21,10 @@ nav a{
     color: black;
 }
 
+div{
+    padding: 10px;
+}
+
 nav a:hover{
     color: gold;
     background-color: darkblue;
@@ -32,4 +36,12 @@ main{
 
 h1 {
     font-family: cursive;
+}
+
+.even{
+    background-color: #ccd;
+}
+
+.odd{
+    background-color: #bbd;
 }

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(name = "MainServlet", value = "", urlPatterns = {"", "/about", "/About", "/home", "/Home"})
+@WebServlet(name = "MainServlet", urlPatterns = {"", "/about", "/About", "/home", "/Home"})
 public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
