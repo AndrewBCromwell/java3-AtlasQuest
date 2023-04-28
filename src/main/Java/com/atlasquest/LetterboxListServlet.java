@@ -28,6 +28,23 @@ public class LetterboxListServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LetterboxAccessor lbAccess = new LetterboxAccessor();
+        String search = request.getParameter("q");
+        if(search == null){
+            search = "";
+        }
+        ArrayList<Letterbox> letterboxes;
+        try{
+            letterboxes = lbAccess.SelectAllLetterboxes();
+            String finalSearch = search;
+            if(!search.equals("")) {
+                letterboxes.removeIf(lb -> !lb.getName().toLowerCase().contains(finalSearch.toLowerCase()));
+            }
+            request.setAttribute("Letterboxes", letterboxes);
+        }catch (SQLException e){
+            request.setAttribute("Error", e.getMessage());
+        }
 
+        request.getRequestDispatcher("WEB-INF/LetterboxList.jsp").forward(request, response);
     }
 }

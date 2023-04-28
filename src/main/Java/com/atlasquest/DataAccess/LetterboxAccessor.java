@@ -44,6 +44,35 @@ public class LetterboxAccessor implements DAO_MySQL<Letterbox> {
         return letterboxes;
     }
 
+    public Letterbox SelectLetterboxeByLetterboxId(int id) throws SQLException {
+        Letterbox letterbox = null;
+        try(Connection connection = getConnection()){
+            if(connection.isValid(3)){
+                CallableStatement procedure = connection.prepareCall("{CALL sp_select_letterbox_by_LetterboxId(?)}");
+                procedure.setInt(1, id);
+                ResultSet resultSet = procedure.executeQuery();
+                while (resultSet.next()){
+                    String name = resultSet.getString("name");
+                    String location = resultSet.getString("location");
+                    String owner = resultSet.getString("owner");
+                    String findability = resultSet.getString("findability");
+                    String status = resultSet.getString("status");
+                    Date planted = resultSet.getDate("planted");
+                    Date lastFound = resultSet.getDate("lastFound");
+                    String clue = resultSet.getString("clue");
+                    letterbox = new Letterbox(id, name, location, owner, findability, new ArrayList<Attribute>(),
+                            status, planted, lastFound, clue);
+                }
+                SelectAttributesByLetterboxId(letterbox);
+
+            }
+        }catch (SQLException e){
+            throw e;
+        }
+
+        return letterbox;
+    }
+
     private Letterbox SelectAttributesByLetterboxId(Letterbox letterbox) throws SQLException {
 
         try(Connection connection = getConnection()){

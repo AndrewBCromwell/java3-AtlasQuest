@@ -17,14 +17,57 @@ CREATE TABLE users (
 
 -- ****************** Creating users stored procedures
 
+DROP PROCEDURE IF EXISTS sp_insert_users;
 
+DELIMITER $$
+CREATE PROCEDURE sp_insert_users(
+    IN p_trailname VARCHAR(100),
+    IN p_firstname VARCHAR(100),
+    IN p_lastname VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+INSERT INTO users (trail_name, first_name, last_name, email, password)
+VALUES (p_trailname, p_firstname, p_lastname, p_email, p_password);
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_select_user_by_trail_name_and_password;
+
+DELIMITER $$
+CREATE PROCEDURE sp_select_user_by_trail_name_and_password(
+    IN p_trailname VARCHAR(100),
+    IN p_password VARCHAR(255)
+)
+BEGIN
+SELECT id, first_name, last_name, email, status, privileges
+FROM users
+WHERE trail_name = p_trailname AND password = p_password
+;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_become_premium;
+
+DELIMITER $$
+CREATE PROCEDURE sp_become_premium(
+    IN p_id VARCHAR(100)
+)
+BEGIN
+UPDATE users
+SET privileges = 'premium'
+WHERE id = p_id
+;
+END$$
+DELIMITER ;
 
 -- ****************** Creating attribute table
 
 DROP TABLE IF EXISTS attribute;
 CREATE TABLE attribute (
-    attributeId VARCHAR(25) PRIMARY KEY,
-    imgURL VARCHAR(100)
+                           attributeId VARCHAR(25) PRIMARY KEY,
+                           imgURL VARCHAR(100)
 );
 
 -- ****************** Inserting attribute records
@@ -47,21 +90,21 @@ VALUES ("Hand-carved", 	"https://www.atlasquest.com/i/stamp/hand-carved/48.png")
        ("Snow-friendly", "https://www.atlasquest.com/i/weather/snow/48.png"),
        ("Puzzle", "https://www.atlasquest.com/i/body/brain/48.png"),
        ("Compass Required", "https://www.atlasquest.com/i/compass/48.png")
-       ;
+;
 
 -- ****************** Creating Letterbox table
 
 DROP TABLE IF EXISTS Letterbox;
 CREATE TABLE Letterbox (
-    LetterboxId INT auto_increment PRIMARY KEY ,
-    name VARCHAR(100) NOT NULL ,
-    location VARCHAR(100),
-    owner varchar(100) NOT NULL ,
-    findability enum('good', 'average', 'challenging', 'impossible') NOT NULL ,
-    status enum('active', 'unknown', 'unavailable', 'retired') NOT NULL ,
-    planted DATE NOT NULL ,
-    lastFound DATE,
-    clue VARCHAR(9999)
+                           LetterboxId INT auto_increment PRIMARY KEY ,
+                           name VARCHAR(100) NOT NULL ,
+                           location VARCHAR(100),
+                           owner varchar(100) NOT NULL ,
+                           findability enum('good', 'average', 'challenging', 'impossible') NOT NULL ,
+                           status enum('active', 'unknown', 'unavailable', 'retired') NOT NULL ,
+                           planted DATE NOT NULL ,
+                           lastFound DATE,
+                           clue VARCHAR(9999)
 );
 
 -- ****************** Creating Letterbox stored procedures
@@ -81,24 +124,39 @@ CREATE PROCEDURE sp_insert_letterbox(
     OUT r_newId INT
 )
 BEGIN
-    INSERT INTO Letterbox (name, location, owner, findability,
-                           status, planted, lastFound, clue)
-    VALUES (p_name, p_location, p_owner, p_findability, p_status,
-            p_planted, p_lastFound, p_clue);
+INSERT INTO Letterbox (name, location, owner, findability,
+                       status, planted, lastFound, clue)
+VALUES (p_name, p_location, p_owner, p_findability, p_status,
+        p_planted, p_lastFound, p_clue);
 
-    SET r_newId = LAST_INSERT_ID();
+SET r_newId = LAST_INSERT_ID();
 END$$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS sp_select_all_letterboxs;
+DROP PROCEDURE IF EXISTS sp_select_all_letterboxes;
 
 DELIMITER $$
 CREATE PROCEDURE sp_select_all_letterboxes()
 BEGIN
-    SELECT LetterboxId, name,location, owner, findability, status,
-           planted, lastFound, clue
-    FROM letterbox
-        ;
+SELECT LetterboxId, name,location, owner, findability, status,
+       planted, lastFound, clue
+FROM letterbox
+;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_select_letterbox_by_LetterboxId;
+
+DELIMITER $$
+CREATE PROCEDURE sp_select_letterbox_by_LetterboxId(
+    IN p_LetterboxId INT
+)
+BEGIN
+SELECT LetterboxId, name,location, owner, findability, status,
+       planted, lastFound, clue
+FROM letterbox
+WHERE LetterboxId = p_LetterboxId
+;
 END$$
 DELIMITER ;
 
@@ -174,11 +232,11 @@ Look in the roots of a fallen tree for your treasure!
 
 Drop TABLE if exists LetterboxAttribute;
 CREATE TABLE LetterboxAttribute(
-    LetterboxId         INT     NOT NULL ,
-    attributeId         VARCHAR(25)    NOT NULL,
-    FOREIGN KEY (LetterboxId) REFERENCES  Letterbox(LetterboxId),
-    FOREIGN KEY (attributeId) REFERENCES  attribute(attributeId),
-    PRIMARY KEY (LetterboxId, AttributeId)
+                                   LetterboxId         INT     NOT NULL ,
+                                   attributeId         VARCHAR(25)    NOT NULL,
+                                   FOREIGN KEY (LetterboxId) REFERENCES  Letterbox(LetterboxId),
+                                   FOREIGN KEY (attributeId) REFERENCES  attribute(attributeId),
+                                   PRIMARY KEY (LetterboxId, AttributeId)
 )
 
 -- ****************** Creating LetterboxAttribute stored procedures
@@ -191,8 +249,8 @@ CREATE PROCEDURE sp_insert_LetterboxAtribute(
     IN p_attributeid VARCHAR(25)
 )
 BEGIN
-    INSERT INTO LetterboxAttribute (LetterboxId, attributeId)
-    VALUES (p_letterboxid, p_attributeid);
+INSERT INTO LetterboxAttribute (LetterboxId, attributeId)
+VALUES (p_letterboxid, p_attributeid);
 END$$
 DELIMITER ;
 
@@ -203,35 +261,35 @@ CREATE PROCEDURE sp_select_attributes_by_LetterboxId(
     IN p_LetterboxId    INT
 )
 BEGIN
-    SELECT attribute.attributeId, attribute.imgURL
-    FROM attribute JOIN LetterboxAttribute on attribute.attributeId = LetterboxAttribute.attributeId
-    WHERE LetterboxAttribute.LetterboxId = p_LetterboxId
-    ;
+SELECT attribute.attributeId, attribute.imgURL
+FROM attribute JOIN LetterboxAttribute on attribute.attributeId = LetterboxAttribute.attributeId
+WHERE LetterboxAttribute.LetterboxId = p_LetterboxId
+;
 END$$
 DELIMITER ;
 
 -- ****************** Inserting LetterboxAttributes
 
 INSERT INTO LetterboxAttribute  (LetterboxId, attributeId)
-    VALUES (5, "Hand-carved"),
-           (5, "Drive-by"),
-           (5, "Pet-friendly"),
-           (5, "Compass Required"),
-           (5, "Puzzle"),
-           (4, "Hand-carved"),
-           (4, "Stroll"),
-           (3, "Hand-carved"),
-           (3, "Indoors"),
-           (3, "Snow-friendly"),
-           (3, "Urban location"),
-           (2, "Hand-carved"),
-           (2, "Drive-by"),
-           (2, "Snow-friendly"),
-           (2, "Pet-friendly"),
-           (2, "Bike-friendly"),
-           (2, "Urban location"),
-           (1, "Hand-carved"),
-           (1, "Drive-by"),
-           (1, "Snow-friendly"),
-           (1, "Bike-friendly")
+VALUES (5, "Hand-carved"),
+       (5, "Drive-by"),
+       (5, "Pet-friendly"),
+       (5, "Compass Required"),
+       (5, "Puzzle"),
+       (4, "Hand-carved"),
+       (4, "Stroll"),
+       (3, "Hand-carved"),
+       (3, "Indoors"),
+       (3, "Snow-friendly"),
+       (3, "Urban location"),
+       (2, "Hand-carved"),
+       (2, "Drive-by"),
+       (2, "Snow-friendly"),
+       (2, "Pet-friendly"),
+       (2, "Bike-friendly"),
+       (2, "Urban location"),
+       (1, "Hand-carved"),
+       (1, "Drive-by"),
+       (1, "Snow-friendly"),
+       (1, "Bike-friendly")
 ;
