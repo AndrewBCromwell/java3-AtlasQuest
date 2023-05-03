@@ -8,10 +8,10 @@ CREATE TABLE users (
                        trail_name VARCHAR(100) NOT NULL,
                        first_name VARCHAR(100) NOT NULL,
                        last_name VARCHAR(100) NOT NULL,
-                       email VARCHAR(100) NOT NULL UNIQUE,
+                       email VARCHAR(100) NOT Null,
                        boxes_found INT DEFAULT 0,
                        password VARCHAR(255) NOT NULL,
-                       status enum('inactive', 'active', 'locked') NOT NULL,
+                       status enum('active', 'inactive', 'locked') NOT NULL,
                        privileges enum('none', 'editor', 'admin', 'premium') NOT NULL
 );
 
@@ -41,7 +41,7 @@ CREATE PROCEDURE sp_select_user_by_trail_name_and_password(
     IN p_password VARCHAR(255)
 )
 BEGIN
-SELECT id, first_name, last_name, email, status, privileges
+SELECT id, first_name, last_name, email, boxes_found, status, privileges
 FROM users
 WHERE trail_name = p_trailname AND password = p_password
 ;
@@ -293,3 +293,22 @@ VALUES (5, "Hand-carved"),
        (1, "Snow-friendly"),
        (1, "Bike-friendly")
 ;
+
+DROP PROCEDURE IF EXISTS sp_found_box;
+
+DELIMITER $$
+CREATE PROCEDURE sp_found_box(
+    IN p_LetterboxId    INT,
+    IN p_UsersId        INT
+)
+BEGIN
+UPDATE Letterbox
+SET lastFound = CURDATE()
+WHERE LetterboxId = p_LetterboxId
+;
+UPDATE users
+SET boxes_found = boxes_found + 1
+WHERE id = p_UsersId
+;
+END$$
+DELIMITER ;

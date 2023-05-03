@@ -38,7 +38,6 @@ public class LoginServlet extends HttpServlet {
             if(user == null) {
                 request.setAttribute("loginFailed", true);
                 request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
-                return;
             } else {
                     // CORRECT MATCH!
                     HttpSession session = request.getSession();
@@ -46,7 +45,6 @@ public class LoginServlet extends HttpServlet {
                     System.out.println(session.getId());
                     session.setAttribute("user", user);
                     response.sendRedirect(request.getContextPath());
-                    return;
             }
         }catch (SQLException e){
             request.setAttribute("loginFailed", true);

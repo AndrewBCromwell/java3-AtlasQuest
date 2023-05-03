@@ -47,8 +47,16 @@ h1 {
 }
 
 button{
+    margin: 10px;
     background-color: #ababab !important;
     border: 2px black !important;
     border-radius: 3px;
 }
 
+.search{
+    margin-bottom: 5px;
+}
+
+.search form input{
+    max-width: 100px;
+}

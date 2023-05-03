@@ -96,4 +96,19 @@ public class LetterboxAccessor implements DAO_MySQL<Letterbox> {
         return letterbox;
     }
 
+    public int FoundBox(int letterboxId, int userId) throws SQLException{
+        int numRowsAffected = 0;
+        try(Connection connection = getConnection()) {
+            if(connection.isValid(3)) {
+                CallableStatement callableStatement = connection.prepareCall("{CALL sp_found_box(?,?)}");
+                callableStatement.setInt(1, letterboxId);
+                callableStatement.setInt(2, userId);
+                numRowsAffected = callableStatement.executeUpdate();
+                callableStatement.close();
+            }
+        } catch(SQLException e) {
+            throw e;
+        }
+        return numRowsAffected;
+    }
 }

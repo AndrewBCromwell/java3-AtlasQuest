@@ -49,7 +49,8 @@
         <img src="<%=attribute.getImgURL()%>" alt="<%=attribute.getAttributeId()%>">
       <% } %>
       <p><%=letterbox.getLocation()%></p>
-      <button>Record find</button>
+      <a href="find?box=<%=letterbox.getId()%>"><button>Record find</button></a>
+      <br>
       <p><span>Planter: </span><%=letterbox.getOwner()%></p>
       <p><span>Planted: </span><%=letterbox.getPlanted()%></p>
       <p><span>Last Found: </span><%=letterbox.getLastFound()%></p>

@@ -37,33 +37,35 @@
     </ul>
 </nav>
 <!-- end or shared section -->
-<main class="form-signin w-100 mx-auto">
+<main class="form-signin">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <form class="pt-4 pb-2 text-center" method="POST" action="login">
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-    <form method="POST" action="login">
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                <div class="form-floating">
+                    <input type="text" class="form-control" name="trailName" id="floatingInput">
+                    <label for="floatingInput">Trail Name</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
 
-        <div class="form-floating">
-            <input type="text" class="form-control" name="trailName" id="floatingInput">
-            <label for="floatingInput">Trail Name</label>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+
+                <% if(loginFailed) { %>
+                <div class="alert alert-warning" role="alert">
+                    That trail name and password combination could not be found
+                </div>
+                <% } %>
+            </div>
         </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
-        </div>
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-
-        <% if(loginFailed) { %>
-        <div class="alert alert-warning" role="alert">
-            That trail name and password combination could not be found
-        </div>
-        <% } %>
-
     </form>
 
 </main>
