@@ -60,3 +60,7 @@ button{
 .search form input{
     max-width: 100px;
 }
+
+.oops{
+    color: red;
+}
