@@ -35,7 +35,7 @@
 </nav>
 <!-- end or shared section -->
 <main>
-    <h1 class="oops">Oops. The url you requested does not seem to be available</h1>
+    <h1 class="oops">Oops. The url you requested does not seem to be available.</h1>
 </main>
 
 

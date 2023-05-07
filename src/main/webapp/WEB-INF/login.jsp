@@ -61,7 +61,7 @@
 
                 <% if(loginFailed) { %>
                 <div class="alert alert-warning" role="alert">
-                    That trail name and password combination could not be found
+                    That trail name and password combination could not be found.
                 </div>
                 <% } %>
             </div>

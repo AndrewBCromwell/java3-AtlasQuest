@@ -44,10 +44,11 @@ public class LoginServlet extends HttpServlet {
                     request.changeSessionId();
                     System.out.println(session.getId());
                     session.setAttribute("user", user);
-                    response.sendRedirect(request.getContextPath());
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
             }
         }catch (SQLException e){
             request.setAttribute("loginFailed", true);
+            request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
         }
     }
 }
